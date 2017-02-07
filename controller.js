@@ -15,10 +15,20 @@ $(document).ready(function(){
     //Disables the cell if it has been clicked already
     $(this).off("click");
     //Call whoWon() every click to see if the game is over
-    if(game1.whoWon()){
+    if(game1.whoWon() == 1){
       //update the gameWon tag if there is winner
+      $("#gameWon2").text("You torpedoed all the ships! Game Over!");
       //somehow disable gameplay/board
+      $("td").off("click");
+
     }
+    else if(game1.whoWon() == 0){
+      //update the gameWon tag to show loss
+      $("#gameWon2").text("You're out of torpedoes! Game Over!");
+      //disable game board 
+      $("td").off("click");
+    }
+
   })
 
 });

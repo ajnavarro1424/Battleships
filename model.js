@@ -37,7 +37,15 @@ function game() {
   return {
     whoWon: function() {
       //Determines if the game is over, and if there is a winner
-      
+      if(ships == 0){//Determines win if ships = 0
+        return 1;
+      }
+      else if(torps <= 0){//Determines loss if torps =0
+        return 0;
+      }
+      else{ //Nothing happens if ships & torps > 0
+        return -1
+      }
     },
     spendTorp: function(){
       console.log("Remaining Torpedoes: ",--torps)
