@@ -3,3 +3,11 @@ td {
   height: 30px;
   border: 2px solid black;
 }
+
+.miss {
+  background-color: #d25555;
+}
+
+.hit {
+  background-color: #68d255;
+}
