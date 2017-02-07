@@ -1,6 +1,7 @@
 var game1 = game();
 $(document).ready(function(){
   buildTable(); //Builds 100 cell table which is the board
+  //findShips();
 
   $("td").on("click", function() {
     $("#torps2").text(game1.spendTorp());
