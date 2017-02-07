@@ -25,7 +25,8 @@ $(document).ready(function(){
     else if(game1.whoWon() == 0){
       //update the gameWon tag to show loss
       $("#gameWon2").text("You're out of torpedoes! Game Over!");
-      //disable game board 
+      findShips();
+      //disable game board
       $("td").off("click");
     }
 
@@ -58,9 +59,31 @@ function convertGrid(strNum){ //takes the id of the cell as a string
 
   if(board[row][col]==SHIP){ //compares the row and col to the existing board to see if there is a ship
     $("#ships2").text(game1.decrementShips());
+    //Changes the value of SHIP to "Found ship"=2
+    board[row][col] = 2;
     return true; //meaning hit
   }
   else {
     return false; //meaning miss
+  }
+}
+
+function findShips(){
+  board.forEach(function(e, i){
+    e.forEach(function(e2, i2){
+      if(e2==1){
+        $("#"+convertBoard(i,i2)).addClass("showShips")
+        //convert i and i2 to a string
+      }
+    });
+  });
+}
+
+function convertBoard(i, i2){
+  if(i==0){
+    return i2;
+  }
+  else {
+    return i.toString() + i2.toString();
   }
 }
