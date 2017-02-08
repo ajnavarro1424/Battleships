@@ -1,7 +1,7 @@
 var game1 = game();
 $(document).ready(function(){
-  buildTable(); //Builds 100 cell table which is the board
-  findShips();
+  buildTable(); //Builds 144 cell table which is the board
+
 
   $("td").on("click", function() {
     $("#torps2").text(game1.spendTorp());
@@ -37,37 +37,67 @@ $(document).ready(function(){
 
 function buildTable() {
   var currentRow = 0; //variable keeps track of current row
-  for(var i = 0; i <100; i++){ //for loop creates 100 cell table
-    if(i%10==0){ // if counter%10 is 0, make a new row
-      currentRow = i/10; //update current row
+  for(var i = 0; i <144; i++){ //for loop creates 100 cell table
+    if(i%12==0){ // if counter%10 is 0, make a new row
+      currentRow = i/12; //update current row
       $("#board").append('<tr id="row' + currentRow + '"></tr>'); //create a new table row with id "row<currentRow>"
+
     }
-    $("#row"+ currentRow).append('<td id="' + i + '"></td>'); //makes a new table cell with id "index<i>" under "row<currentRow"
-
+     //makes a new table cell with id "index<i>" under "row<currentRow"
+    if(i <= 11 || i >= 132){
+      $("#row"+ currentRow).append('<td class="border"></td>');
+    }
+    else if(i%12 == 0 || i%12 == 11) {
+      $("#row"+ currentRow).append('<td class="border"></td>');
+    }
+    else {
+      $("#row"+ currentRow).append('<td id="' + ((i%12)+(currentRow-1)*10) + '"></td>');
+    }
   }
 }
-
+//Takes the HTML table cell id and converts it into board array index
 function convertGrid(strNum){ //takes the id of the cell as a string
-  var spl = strNum.split(""); //splits it into an array
-  if(spl.length<2){
-    var row = 0;
-    var col = parseInt(spl[0]);
-  }//converts each cell into an int
+  if(strNum==null){}
   else {
-    var row = parseInt(spl[0]);
-    var col = parseInt(spl[1]);
-  }
+    var spl = strNum.split(""); //splits it into an array
+    console.log(strNum);
+    if(spl.length<2){ //1-9, all of our single digits
+      var row = 1;
+      var col = parseInt(spl[0]);
+    }//converts each cell into an int
+    else { //controls everything that contains 2 digits
+      if(spl.length==3){ //clean dis up
+        var row = 10;
+        var col = 10;
+      }
+      else if(parseInt(spl[1])==0){
+        var row = parseInt(spl[0]);
+        var col = 10;
+      } else {
+        var row = parseInt(spl[0])+1;
+        var col = parseInt(spl[1]);
+      }
+    }
 
-  if(board[row][col]==SHIP){ //compares the row and col to the existing board to see if there is a ship
-    $("#ships2").text(game1.decrementShips());
-    //Changes the value of SHIP to "Found ship"=2
-    board[row][col] = 2;
-    return true; //meaning hit
-  }
-  else {
-    return false; //meaning miss
-  }
+    console.log(row, col);
+
+    if(board[row][col]==SHIP){ //compares the row and col to the existing board to see if there is a ship
+      $("#ships2").text(game1.decrementShips());
+      //Changes the value of SHIP to "Found ship"=2
+      board[row][col] = 2;
+      return true; //meaning hit
+    }
+    else {
+      return false; //meaning miss
+    }
 }
+}
+//Takes the board array index and converts it to to the HTML index
+//(i-1)*10+i2
+function convertBoard(i, i2){
+  return ((i-1)*10)+i2;
+}
+
 
 function findShips(){
   board.forEach(function(e, i){
@@ -78,13 +108,4 @@ function findShips(){
       }
     });
   });
-}
-
-function convertBoard(i, i2){
-  if(i==0){
-    return i2;
-  }
-  else {
-    return i.toString() + i2.toString();
-  }
 }
