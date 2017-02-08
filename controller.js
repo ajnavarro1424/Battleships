@@ -1,12 +1,12 @@
 var game1 = game();
 $(document).ready(function(){
   buildTable(); //Builds 100 cell table which is the board
-  //findShips();
+  findShips();
 
   $("td").on("click", function() {
     $("#torps2").text(game1.spendTorp());
     //if ship is on clicked cell, then do .hit class, else do .miss
-    if(convertGrid($(this).attr('id'))){
+    if(convertGrid($(this).attr('id'))){ //only working for SHIPs rn
       $(this).addClass("hit");
     }
     else {
@@ -72,7 +72,7 @@ function convertGrid(strNum){ //takes the id of the cell as a string
 function findShips(){
   board.forEach(function(e, i){
     e.forEach(function(e2, i2){
-      if(e2==1){
+      if(e2>=1){
         $("#"+convertBoard(i,i2)).addClass("showShips")
         //convert i and i2 to a string
       }
