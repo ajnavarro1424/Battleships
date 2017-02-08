@@ -11,11 +11,11 @@ for(var i = 1; i <= numOfShips; i++){
   var randCol = ...;
   var randDir = ...;
   //Checks the initial position
-  if(initialShipCheck() == false || dirShipCheck() == false)
+  if(initialShipCheck() == false || dirShipCheck() == false){
     i--//reset the randRow and randCol
-
-  else ()
-
+  }
+  else{
+    placeShip();
   }
 
 
@@ -29,23 +29,23 @@ function initialShipCheck{return true or false}
 
 
 
-//Loop iterating through all directions if necessary
-function dirShipCheck(){
-  for(var i = 1; i<=4; i++){
-    //Loop for a searching for other ship conflicts or bounds
-    for(length of the ship)
-      if(there is a ship around the current position)
-        break;
-      else if (it's the last position on the ship)
-        return true;
+  //Loop iterating through all directions if necessary
+  function dirShipCheck(){
+    for(var i = 1; i<=4; i++){
+      //Loop for a searching for other ship conflicts or bounds
+      for(length of the ship)
+        if(there is a ship around the current position)
+          break;
+        else if (it's the last position on the ship)
+          return true;
+      }
+      if(randDir==3)
+          randDir=0;
+      else
+        randDir++;
     }
-    if(randDir==3)
-        randDir=0;
-    else
-      randDir++;
+      return false;
   }
-    return false;
-}
 
 
 //Loop through cleared searched positions and place ship

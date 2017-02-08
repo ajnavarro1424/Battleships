@@ -1,6 +1,7 @@
 var game1 = game();
 $(document).ready(function(){
   buildTable(); //Builds 144 cell table which is the board
+  findShips();
 
 
   $("td").on("click", function() {
@@ -100,10 +101,11 @@ function convertBoard(i, i2){
 
 
 function findShips(){
-  board.forEach(function(e, i){
-    e.forEach(function(e2, i2){
+  board.forEach(function(e, row){
+    e.forEach(function(e2, col){
       if(e2>=1){
-        $("#"+convertBoard(i,i2)).addClass("showShips")
+        console.log("Found ship: ", e2, row, col);
+        $("#"+convertBoard(row,col)).addClass("showShips")
         //convert i and i2 to a string
       }
     });
