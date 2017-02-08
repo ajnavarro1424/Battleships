@@ -44,11 +44,25 @@ function game() {
   }
 
   function placeCarrier(){
+    //0 represents the vertical condition and 1 represents the horizontal condition.
+    //Direction determines ship end.
+    var randDirection = getRandomInt(0,3);
     //Generate random location that is 2 spaces away from every wall.
-    var randRow = getRandomInt(2,7);
-    var randCol = getRandomInt(2,7);
-    //0 represents the vertical condition and 1 represents the horizontal condition
-    var randDirection = getRandomInt(0,1);
+    var randRowFront = getRandomInt(0,9);
+    var randColFront = getRandomInt(0,9);
+    //Take the initial direction and front location and try to place the ship
+    for(var i = 0; i < CARRIER; i++){
+      if(randDirection == 0){
+        if(randRowFront+i >= 0 && randRowFront <= 9){
+          if(board[randRowFront+i][randColFront] == 0){
+          //if(check around the ship using randDirection to modify search range.
+          //USE RECURSION)
+          }
+        }
+      }
+    } else if(randDirection == 1){
+
+    }
 
     for(var i = -2; i <= 2; i++){
       //if to use direction to determine row vs. column ship placement
