@@ -3,6 +3,9 @@ td {
   height: 30px;
   border: 2px solid black;
 }
+.remaining {
+
+}
 
 .miss {
   background-color: #d25555;
@@ -17,4 +20,24 @@ td {
 }
 .border {
   background-color: grey;
+}
+
+.carrier {
+  background-color: #00fff3;
+}
+
+.battleship {
+  background-color: #ffd472;
+}
+
+.cruiser {
+  background-color: #753ecc;
+}
+
+.destroyer {
+  background-color: #1fea26;
+}
+
+.submarine {
+background-color: #000000;
 }

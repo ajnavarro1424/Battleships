@@ -1,18 +1,18 @@
 var game1 = game();
 $(document).ready(function(){
-  buildTable(); //Builds 144 cell table which is the board
-  findShips();
+  //buildTable(); //Builds 144 cell table which is the board
+  //findShips();
 
 
   $("td").on("click", function() {
     $("#torps2").text(game1.spendTorp());
     //if ship is on clicked cell, then do .hit class, else do .miss
     if(convertGrid($(this).attr('id'))){ //only working for SHIPs rn
-      $(this).addClass("hit");
+      $(this).text("Hit").addClass("hit");
     }
     else {
       //Adds red .miss class wheneve u click
-      $(this).addClass("miss");
+      $(this).text("Miss").addClass("miss");
     }
     //Disables the cell if it has been clicked already
     $(this).off("click");
@@ -79,13 +79,9 @@ function convertGrid(strNum){ //takes the id of the cell as a string
         var col = parseInt(spl[1]);
       }
     }
-
     console.log(row, col);
-
-    if(board[row][col]==SHIP){ //compares the row and col to the existing board to see if there is a ship
-      $("#ships2").text(game1.decrementShips());
-      //Changes the value of SHIP to "Found ship"=2
-      board[row][col] = 2;
+    if(board[row][col]>=1){ //compares the row and col to the existing board to see if there is a ship
+      $("#ships2").text(game1.decrementVessel());
       return true; //meaning hit
     }
     else {
@@ -103,11 +99,28 @@ function convertBoard(i, i2){
 function findShips(){
   board.forEach(function(e, row){
     e.forEach(function(e2, col){
-      if(e2>=1){
-        console.log("Found ship: ", e2, row, col);
-        $("#"+convertBoard(row,col)).addClass("showShips")
-        //convert i and i2 to a string
+      if(!$("#"+convertBoard(row,col)).hasClass('hit')){
+        switch (e2) {
+          case 5:
+            $("#"+convertBoard(row,col)).addClass("carrier");
+            break;
+          case 4:
+            $("#"+convertBoard(row,col)).addClass("battleship");
+            break;
+          case 3:
+            $("#"+convertBoard(row,col)).addClass("cruiser");
+            break;
+          case 2:
+            $("#"+convertBoard(row,col)).addClass("destroyer");
+            break;
+          case 1:
+            $("#"+convertBoard(row,col)).addClass("submarine");
+            break;
+
+
+        }
       }
+        console.log("Found ship: ", e2, row, col);
     });
   });
 }

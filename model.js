@@ -1,8 +1,15 @@
 var torps = 25, ships = 5;
-var SHIP = 1;
 var CARRIER= 5;
 var BATTLESHIP = 4;
 var CRUISER = 3;
+var DESTROYER = 2;
+var SUBMARINE =1;
+var CARRIERCOUNT = 1;
+var BATTLESHIPCOUNT = 2;
+var CRUISERCOUNT = 2;
+var DESTROYERCOUNT = 2;
+var SUBMARINECOUNT =1;
+
 var board = [];
 //Populates the board array with zeroes
 
@@ -10,7 +17,11 @@ function game() {
   //Relevant function calls
   //Builds the 12x12 array with appropriate 0's and -1's
   buildBoard();
-  searchPlaceShip(CARRIER, 1);
+  searchPlaceShip(CARRIER, CARRIERCOUNT);
+  searchPlaceShip(BATTLESHIP, BATTLESHIPCOUNT);
+  searchPlaceShip(CRUISER, CRUISERCOUNT);
+  searchPlaceShip(DESTROYER, DESTROYERCOUNT);
+  searchPlaceShip(SUBMARINE, SUBMARINECOUNT);
   //Random number generator for randRow,randCol,randDir
   function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -169,8 +180,8 @@ function game() {
     getTorps: function(){
       return torps;
     },
-    decrementShips: function(){
-      return --ships;
+    decrementVessel: function(currentShipCount){
+      return --currentShipCount
     }
   }
 
