@@ -1,14 +1,21 @@
 var game1 = game();
+var bsName = "BATTLESHIP".split(""); //The nanme of the game, to be used on the border
 $(document).ready(function(){
   //buildTable(); //Builds 144 cell table which is the board
   //findShips();
 
 
-  $("td").on("click", function() {
+  $("td:not(.border)").on("click", function() {
+    $(".border").addClass("borderAn");
+    $(".border").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+  function(e) {
+    $(".border").removeClass("borderAn")
+  });
     $("#torps2").text(game1.spendTorp());
-    //if ship is on clicked cell, then do .hit class, else do .miss
+    //if vessel exists on clicked cell, then add .hit class, else do .miss
     if(convertGrid($(this).attr('id'))){ //only working for SHIPs rn
       $(this).text("Hit").addClass("hit");
+
     }
     else {
       //Adds red .miss class wheneve u click
@@ -38,18 +45,38 @@ $(document).ready(function(){
 
 function buildTable() {
   var currentRow = 0; //variable keeps track of current row
-  for(var i = 0; i <144; i++){ //for loop creates 100 cell table
-    if(i%12==0){ // if counter%10 is 0, make a new row
+  var bsCounter = 0; //a counter for the bsName array that will incrment throughtout
+  for(var i = 0; i <144; i++){ //for loop creates 144 cell table
+    if(i%12==0){ // if counter%12 is 0, make a new row
       currentRow = i/12; //update current row
       $("#board").append('<tr id="row' + currentRow + '"></tr>'); //create a new table row with id "row<currentRow>"
 
     }
      //makes a new table cell with id "index<i>" under "row<currentRow"
     if(i <= 11 || i >= 132){
-      $("#row"+ currentRow).append('<td class="border"></td>');
+      if(i!=0 && i!= 11 && i!= 132 && i!=143){ //If position in array is not the edges
+
+        $("#row"+ currentRow).append('<td class="border">' + bsName[bsCounter] +'</td>'); //adds the current position in bsName to the cell, i.e. "B", "A", etc
+        if(bsCounter==bsName.length-1){
+          bsCounter=0;
+        }
+        else{
+          bsCounter++;
+        }
+      }
+      else {
+        $("#row"+ currentRow).append('<td class="border"></td>');
+      }
+
     }
     else if(i%12 == 0 || i%12 == 11) {
-      $("#row"+ currentRow).append('<td class="border"></td>');
+      $("#row"+ currentRow).append('<td class="border">'+bsName[bsCounter]+'</td>'); //for each of the board edges that aren't the four cardinal edges, add a letter
+      if(i%12 == 11){ //if it's the right-most edge, increment bsCounter
+        bsCounter++;
+      }
+      if(bsCounter==10){ //bsCoutner resets before heading back to the line 51 logic
+        bsCounter=0;
+      }
     }
     else {
       $("#row"+ currentRow).append('<td id="' + ((i%12)+(currentRow-1)*10) + '"></td>');
@@ -60,7 +87,7 @@ function buildTable() {
 function convertGrid(strNum){ //takes the id of the cell as a string
   if(strNum==null){}
   else {
-    var spl = strNum.split(""); //splits it into an array
+    var spl = strNum.split(""); //splits strNum(board index) into an array
     console.log(strNum);
     if(spl.length<2){ //1-9, all of our single digits
       var row = 1;
@@ -79,15 +106,45 @@ function convertGrid(strNum){ //takes the id of the cell as a string
         var col = parseInt(spl[1]);
       }
     }
-    console.log(row, col);
-    if(board[row][col]>=1){ //compares the row and col to the existing board to see if there is a ship
-      $("#ships2").text(game1.decrementVessel());
-      return true; //meaning hit
+    //compares the newly calculated array[row][col] to the existing board to see if
+    //there is a vessel that has been hi
+    // if(board[row][col]>=1){
+    //   $("#ships2").text(game1.decrementVessel());
+    //   return true; //meaning hit
+    // }
+    // else {
+    //   return false; //meaning miss
+    // }
+    //Decrment the health of the vessel, and if the vessel health is 0, call    //decrementVessel() wihtin decrementVesselXP()
+    switch (board[row][col]) {
+      case 30:
+        $("#carrier2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 24:
+        $("#battleship2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 28:
+        $("#battleship2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 18:
+        $("#cruiser2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 21:
+        $("#cruiser2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 12:
+        $("#destroyer2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 14:
+        $("#destroyer2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      case 6:
+        $("#submarine2").text(game1.decrementVesselXP(board[row][col]));
+        return true;
+      default:
+        return false;
     }
-    else {
-      return false; //meaning miss
-    }
-}
+  }
 }
 //Takes the board array index and converts it to to the HTML index
 //(i-1)*10+i2
@@ -95,29 +152,37 @@ function convertBoard(i, i2){
   return ((i-1)*10)+i2;
 }
 
-
+//findships() takes the board array and converts it to the board index.
+//It looks for values associated with certain ship types, and Changes their class.
 function findShips(){
   board.forEach(function(e, row){
     e.forEach(function(e2, col){
       if(!$("#"+convertBoard(row,col)).hasClass('hit')){
         switch (e2) {
-          case 5:
+          case 30:
             $("#"+convertBoard(row,col)).addClass("carrier");
             break;
-          case 4:
+          case 24:
             $("#"+convertBoard(row,col)).addClass("battleship");
             break;
-          case 3:
+          case 28:
+            $("#"+convertBoard(row,col)).addClass("battleship2");
+            break;
+          case 18:
             $("#"+convertBoard(row,col)).addClass("cruiser");
             break;
-          case 2:
+          case 21:
+            $("#"+convertBoard(row,col)).addClass("cruiser2");
+            break;
+          case 12:
             $("#"+convertBoard(row,col)).addClass("destroyer");
             break;
-          case 1:
+          case 14:
+            $("#"+convertBoard(row,col)).addClass("destroyer2");
+            break;
+          case 6:
             $("#"+convertBoard(row,col)).addClass("submarine");
             break;
-
-
         }
       }
         console.log("Found ship: ", e2, row, col);

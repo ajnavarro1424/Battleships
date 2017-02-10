@@ -9,6 +9,7 @@ var BATTLESHIPCOUNT = 2;
 var CRUISERCOUNT = 2;
 var DESTROYERCOUNT = 2;
 var SUBMARINECOUNT =1;
+var vesselXP=[[30,5],[24,4],[28,4],[18,3],[21,3],[12,2],[14,2],[6,1]];
 
 var board = [];
 //Populates the board array with zeroes
@@ -52,7 +53,7 @@ function game() {
       var randCol = getRandomInt(1,10);
       var randDir = getRandomInt(0,3);
       var finalCords = [-1,-1,-1];
-      console.log("The coords and the dir is", randRow, randCol, randDir);
+      console.log("COORDS/DIR/SHIPTYPE/CURRENTSHIP", randRow, randCol, randDir,shipType,curShip);
       //Checks the initial position
       if(initialShipCheck() == false || dirShipCheck() == false){
         console.log("Counter is decrimented");
@@ -60,7 +61,9 @@ function game() {
       }
       else{
         console.log("The positions are valid!");
-        placeShip(shipType);
+        //Modifying placeShip to take in the shipCount. shipType * shipCount will provide
+        //a different value per the ship number.
+        placeShip(shipType, curShip);
       }
     }
     //Check to make sure the start coordinate is valid
@@ -129,22 +132,24 @@ function game() {
       }
     }
 
-    function placeShip(shipType) {
+    function placeShip(shipType, numOfShips) {
       var placeShipCounter = 1;
+
       for(var shipPlace = 0; shipPlace<shipType; shipPlace++){
-        console.log("OG, direction, ship type, placeShipCounter ", randRow, randCol, randDir, shipType);
+        console.log("OG, direction, ship type, placeShipCounter ", randRow, randCol, randDir, shipType, placeShipCounter);
+        //curShip increased by 5, to provide individual values for each of the place ships.
         switch (randDir) {
           case 0:
-            board[randRow-shipPlace][randCol]=shipType;
+             board[randRow-shipPlace][randCol]=shipType*(curShip+5);
             break;
           case 1:
-            board[randRow][randCol+shipPlace]=shipType;
+            board[randRow][randCol+shipPlace]=shipType*(curShip+5);
             break;
           case 2:
-            board[randRow+shipPlace][randCol]=shipType;
+            board[randRow+shipPlace][randCol]=shipType*(curShip+5);
             break;
           case 3:
-            board[randRow][randCol-shipPlace]=shipType;
+            board[randRow][randCol-shipPlace]=shipType*(curShip+5);
             break;
         }
       }
@@ -180,8 +185,49 @@ function game() {
     getTorps: function(){
       return torps;
     },
+    //decrements the vessel count for the specific ship counter passed.
     decrementVessel: function(currentShipCount){
-      return --currentShipCount
+      console.log("WE ARE HERE WITH ", --currentShipCount);
+      return currentShipCount;
+    },
+    decrementVesselXP: function(vesselID){
+      for(var outer = 0; outer<vesselXP.length; outer++){
+        for(var inner = 0; inner < 2; inner++){
+          if(vesselXP[outer][inner] == vesselID){
+            inner++;
+            console.log("Ship ID "+ vesselID + " health was decremented to " + --vesselXP[outer][inner]);
+            if(vesselXP[outer][inner]== 0){
+              switch (outer) {
+                case 0:
+                  console.log("CARRIER Count will be decremented");
+                  return CARRIERCOUNT=this.decrementVessel(CARRIERCOUNT);
+
+                case 1:
+                case 2:
+                  console.log("BATTLESHIP Count will be decremented");
+                  return BATTLESHIPCOUNT=this.decrementVessel(BATTLESHIPCOUNT);
+
+                case 3:
+                case 4:
+                  console.log("CRUISER Count will be decremented");
+                  return CRUISERCOUNT=this.decrementVessel(CRUISERCOUNT);
+
+                case 5:
+                case 6:
+                  console.log("DESTROYER Count will be decremented");
+                  return DESTROYERCOUNT=this.decrementVessel(DESTROYERCOUNT);
+
+                case 7:
+                  console.log("SUBMARINE Count will be decremented");
+                  return SUBMARINECOUNT=this.decrementVessel(SUBMARINECOUNT);
+                default:
+              }
+            }
+          }
+
+        }
+      }
+
     }
   }
 
