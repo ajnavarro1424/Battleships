@@ -1,4 +1,4 @@
-var torps = 25, ships = 5;
+var torps = 50, ships = 5;
 var CARRIER= 5;
 var BATTLESHIP = 4;
 var CRUISER = 3;

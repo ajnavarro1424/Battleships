@@ -6,15 +6,15 @@ $(document).ready(function(){
 
 
   $("td:not(.border)").on("click", function() {
-    $(".border").addClass("borderAn");
-    $(".border").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
-  function(e) {
-    $(".border").removeClass("borderAn")
-  });
     $("#torps2").text(game1.spendTorp());
     //if vessel exists on clicked cell, then add .hit class, else do .miss
     if(convertGrid($(this).attr('id'))){ //only working for SHIPs rn
       $(this).text("Hit").addClass("hit");
+      $(".border").addClass("borderAn");
+      $(".border").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+      function(e) {
+        $(".border").removeClass("borderAn")
+      });
 
     }
     else {
@@ -39,6 +39,13 @@ $(document).ready(function(){
       $("td").off("click");
     }
 
+  })
+
+  $("button").on("click", function() {
+    // clearShips();
+    // board = [];
+    // game1=game();
+    location.reload();
   })
 
 });
@@ -184,6 +191,49 @@ function findShips(){
             $("#"+convertBoard(row,col)).addClass("submarine");
             break;
         }
+      }
+        console.log("Found ship: ", e2, row, col);
+    });
+  });
+}
+
+//Hard to implement correctly bc we have a bunch of global variables
+function clearShips(){
+  board.forEach(function(e, row){
+    e.forEach(function(e2, col){
+      if(!$("#"+convertBoard(row,col)).hasClass('hit')){
+        switch (e2) {
+          case 30:
+            $("#"+convertBoard(row,col)).removeClass("carrier");
+            break;
+          case 24:
+            $("#"+convertBoard(row,col)).removeClass("battleship");
+            break;
+          case 28:
+            $("#"+convertBoard(row,col)).removeClass("battleship2");
+            break;
+          case 18:
+            $("#"+convertBoard(row,col)).removeClass("cruiser");
+            break;
+          case 21:
+            $("#"+convertBoard(row,col)).removeClass("cruiser2");
+            break;
+          case 12:
+            $("#"+convertBoard(row,col)).removeClass("destroyer");
+            break;
+          case 14:
+            $("#"+convertBoard(row,col)).removeClass("destroyer2");
+            break;
+          case 6:
+            $("#"+convertBoard(row,col)).removeClass("submarine");
+            break;
+        }
+        if($("#"+convertBoard(row,col)).hasClass('miss')){
+          $("#"+convertBoard(row,col)).removeClass('miss');
+        }
+      }
+      else{
+        ("#"+convertBoard(row,col)).removeClass('hit');
       }
         console.log("Found ship: ", e2, row, col);
     });
