@@ -26,7 +26,7 @@ $(document).ready(function(){
     //Call whoWon() every click to see if the game is over
     if(game1.whoWon() == 1){
       //update the gameWon tag if there is winner
-      $("#gameWon2").text("You torpedoed all the ships! Game Over!");
+      $("#gameWon2").text("You sunk all the ships! Congradulation!");
       //somehow disable gameplay/board
       $("td").off("click");
 

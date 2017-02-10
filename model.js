@@ -161,8 +161,13 @@ function game() {
   //Inde game() return obejct closure
   return {
     whoWon: function() {
-      //Determines if the game is over, and if there is a winner
-      if(ships == 0){//Determines win if ships = 0
+      var shipsLeft = 8;
+      for(var outer = 0; outer<vesselXP.length; outer++){
+        if(vesselXP[outer][1]==0){
+          --shipsLeft;
+        }
+      }
+      if(shipsLeft == 0){//Determines win if ships = 0
         return 1;
       }
       else if(torps <= 0){//Determines loss if torps =0
